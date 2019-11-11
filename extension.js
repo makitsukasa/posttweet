@@ -37,7 +37,7 @@ function activate(context) {
 		// https://tasoweb.hatenablog.com/entry/2018/06/01/002438
 
 		console.log("start post tweet");
-		
+
 		let editor = vscode.window.activeTextEditor; // エディタ取得
 		if(!editor){
 			vscode.window.showErrorMessage("Open new window, write, and call extension.posttweet");
