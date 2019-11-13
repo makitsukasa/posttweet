@@ -58,8 +58,8 @@ function activate(context) {
 			vscode.window.showErrorMessage("Open new window, write, and call extension.posttweet");
 			return;
 		}
-		const doc = editor.document; // ドキュメント取得
-		let text = doc.getText();
+		const document = editor.document; // ドキュメント取得
+		let text = document.getText();
 		let closeWindowAfterTweet;
 		if(editor.selection.isEmpty){
 			// 選択範囲が空のときはテキスト全体をツイート
@@ -68,7 +68,7 @@ function activate(context) {
 		}
 		else{
 			// 選択範囲が空でないときは選択範囲のみをツイート
-			text = doc.getText(editor.selection);
+			text = document.getText(editor.selection);
 			closeWindowAfterTweet = false;
 		}
 		console.log("text : " + text);
@@ -89,6 +89,12 @@ function activate(context) {
 				console.log("Tweeted succeefully : " + tweet);
 				vscode.window.showInformationMessage("Tweeted succeefully! : " + text);
 				if(closeWindowAfterTweet){
+					editor.edit(builder => {
+						builder.delete(new vscode.Range(
+							document.positionAt(0),
+							document.positionAt(document.getText().length) // length - 1 ?????
+						));
+					});
 					vscode.commands.executeCommand('workbench.action.closeActiveEditor');
 				}
 			}
