@@ -71,7 +71,7 @@ function activate(context) {
 			text = doc.getText(editor.selection);
 			closeWindowAfterTweet = false;
 		}
-		console.log(text);
+		console.log("text : " + text);
 
 		if(getStrLen_Twitter(text) > 280){
 			vscode.window.showErrorMessage(`The length of message (${getStrLen_Twitter(text)}) must be 280 or less : ${text}`);
@@ -80,21 +80,19 @@ function activate(context) {
 		}
 
 		tw.post('statuses/update', {status: text}, function(error, tweet, response){
-			if (!error) {
-				console.log(tweet);
-			} else {
+			if (error) {
 				console.log('error');
 				console.log(response);
-				vscode.window.showErrorMessage(`Error occured : ${JSON.stringify(response)}`);
-				return;
+				vscode.window.showErrorMessage(`Error occured : ${JSON.parse(response.body).errors[0].message} ${JSON.stringify(response)}`);
+			}
+			else{
+				console.log("Tweeted succeefully : " + tweet);
+				vscode.window.showInformationMessage("Tweeted succeefully! : " + text);
+				if(closeWindowAfterTweet){
+					vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+				}
 			}
 		});
-
-		vscode.window.showInformationMessage("Tweeted succeefully! : " + text);
-
-		if(closeWindowAfterTweet){
-			vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-		}
 	});
 
 	context.subscriptions.push(disposable);
