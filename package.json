@@ -3,6 +3,7 @@
 	"displayName": "posttweet",
 	"description": "",
 	"version": "0.0.1",
+	"publisher": "boxy",
 	"engines": {
 		"vscode": "^1.39.0"
 	},

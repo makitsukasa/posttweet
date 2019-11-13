@@ -1,9 +1,20 @@
+const try_require = function(path){
+	try {
+		return require(path);
+	}
+	catch (e) {
+		console.log('error');
+		console.log(e);
+		vscode.window.showErrorMessage(`Error occured : require(${path}) failed.`);
+		return undefined;
+	}
+}
+
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const twitter = require("twitter");
-const token = require("./token.json");
-
+const token = try_require("./token.json");
 const tw = new twitter(token);
 
 // https://javascript.programmer-reference.com/javascript-han1zen2/
@@ -35,6 +46,10 @@ const getStrLen_Twitter = function (str) {
 function activate(context) {
 	let disposable = vscode.commands.registerCommand('extension.posttweet', function () {
 		// https://tasoweb.hatenablog.com/entry/2018/06/01/002438
+
+		if(!token){
+			return;
+		}
 
 		console.log("start post tweet");
 
